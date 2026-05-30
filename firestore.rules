@@ -1,0 +1,73 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function hasRoleDoc() {
+      return exists(/databases/$(database)/documents/settings/roles);
+    }
+
+    function adminList() {
+      return hasRoleDoc()
+        ? get(/databases/$(database)/documents/settings/roles).data.admins
+        : [];
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.email in adminList();
+    }
+
+    function board(boardId) {
+      return get(/databases/$(database)/documents/boards/$(boardId));
+    }
+
+    function canCreatePost(boardId) {
+      return isAdmin() || board(boardId).data.allowUserPosts == true;
+    }
+
+    match /settings/{docId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow create: if signedIn() && request.auth.uid == userId;
+      allow read: if signedIn() && (request.auth.uid == userId || isAdmin());
+      allow update: if signedIn() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    match /boards/{boardId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /posts/{postId} {
+      allow read: if true;
+      allow create: if signedIn()
+        && request.resource.data.authorUid == request.auth.uid
+        && canCreatePost(request.resource.data.boardId);
+      allow update, delete: if signedIn()
+        && (isAdmin() || request.auth.uid == resource.data.authorUid);
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if signedIn()
+          && request.resource.data.authorUid == request.auth.uid;
+        allow update, delete: if signedIn()
+          && (isAdmin() || request.auth.uid == resource.data.authorUid);
+
+        match /replies/{replyId} {
+          allow read: if true;
+          allow create: if signedIn()
+            && request.resource.data.authorUid == request.auth.uid;
+          allow update, delete: if signedIn()
+            && (isAdmin() || request.auth.uid == resource.data.authorUid);
+        }
+      }
+    }
+  }
+}
