@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Google+Sans+Code:ital,wght,MONO@0,300..800,1;1,300..800,1&family=Chiron+GoRound+TC:wght@200..900&display=swap");
 
 :root {
   --bg: #fff9fc;
@@ -55,19 +55,11 @@ body {
 body {
   position: relative;
   overflow-x: hidden;
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: "Chiron GoRound TC", sans-serif;
   color: var(--text);
   background: radial-gradient(circle at 12% 15%, var(--bg-2), transparent 45%),
     radial-gradient(circle at 84% 80%, color-mix(in srgb, var(--accent-2) var(--bg-glow-strength), transparent), transparent 42%),
     var(--bg);
-}
-
-h1,
-h2,
-h3,
-strong,
-button {
-  font-family: "Space Grotesk", "Noto Sans KR", sans-serif;
 }
 
 #app {
@@ -409,7 +401,7 @@ ul {
   border: 1px solid var(--panel-border);
   background: color-mix(in srgb, var(--panel) 70%, transparent);
   color: var(--text);
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: "Chiron GoRound TC", sans-serif;
   font-size: 1rem;
   border-radius: 14px;
   text-align: left;
@@ -510,7 +502,7 @@ textarea {
   height: 260px;
   resize: vertical;
   overflow: auto;
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: "Chiron GoRound TC", sans-serif;
   border-radius: 0 0 12px 12px;
 }
 
@@ -653,32 +645,36 @@ textarea:focus {
   list-style: decimal;
 }
 
-.post-body-content pre {
-  margin: 0.8em 0;
-  padding: 12px 14px;
-  border: 1px solid var(--panel-border);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--panel) 72%, transparent);
-  color: var(--text);
-  overflow-x: auto;
-  font-family: "Consolas", "Courier New", monospace;
-  font-size: 0.92rem;
-  line-height: 1.55;
-  white-space: pre;
+.ql-code-block-container {
+  font-family: "Consolas", "Courier New", monospace !important;
+  background-color: #23241f;
+  color: #f8f8f2;
+  padding: 5px 10px;
+  border-radius: 3px;
+  counter-reset: line-number;
 }
 
-.post-body-content code {
-  font-family: "Consolas", "Courier New", monospace;
-  font-size: 0.9em;
-  padding: 0.1em 0.35em;
-  border-radius: 6px;
-  background: color-mix(in srgb, var(--chip) 80%, transparent);
+/* 2. 각 줄마다 카운터 증가 및 정렬 설정 */
+.ql-code-block {
+  counter-increment: line-number; 
+  display: flex;
+  white-space: pre-wrap;
 }
 
-.post-body-content pre code {
-  padding: 0;
-  border-radius: 0;
-  background: transparent;
+/* 3. 가상 요소를 통해 줄 번호 렌더링 */
+.ql-code-block::before {
+  content: counter(line-number); 
+  display: inline-block;
+  width: 1.5rem;         /* 줄 번호 영역의 고정 너비 */
+  padding-right: 10px;   /* 코드와 줄 번호 사이의 간격 */
+  margin-right: 10px;
+  text-align: right;     /* 줄 번호 우측 정렬 */
+  color: #999;           /* 줄 번호 색상 */
+  border-right: 2px solid #3a3a3a; /* 구분선 (선택 사항) */
+  
+  /* 코드를 드래그하여 복사할 때 줄 번호가 포함되지 않도록 설정 */
+  user-select: none;     
+  -webkit-user-select: none;
 }
 
 .board-item.readonly {
