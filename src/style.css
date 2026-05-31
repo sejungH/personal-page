@@ -649,32 +649,46 @@ textarea:focus {
   font-family: "Consolas", "Courier New", monospace !important;
   background-color: #23241f;
   color: #f8f8f2;
-  padding: 5px 10px;
+  padding: 10px 0;
   border-radius: 3px;
   counter-reset: line-number;
 }
 
-/* 2. 각 줄마다 카운터 증가 및 정렬 설정 */
 .ql-code-block {
-  counter-increment: line-number; 
-  display: flex;
+  counter-increment: line-number;
+  position: relative;
+  padding-left: 3rem;
+  padding-right: 10px;
   white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.5;
+  min-height: 1.5em;
 }
 
-/* 3. 가상 요소를 통해 줄 번호 렌더링 */
 .ql-code-block::before {
-  content: counter(line-number); 
-  display: inline-block;
-  width: 1.5rem;         /* 줄 번호 영역의 고정 너비 */
-  padding-right: 10px;   /* 코드와 줄 번호 사이의 간격 */
-  margin-right: 10px;
-  text-align: right;     /* 줄 번호 우측 정렬 */
-  color: #999;           /* 줄 번호 색상 */
-  border-right: 2px solid #3a3a3a; /* 구분선 (선택 사항) */
-  
-  /* 코드를 드래그하여 복사할 때 줄 번호가 포함되지 않도록 설정 */
-  user-select: none;     
+  content: counter(line-number);
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 1.5rem;
+  padding-right: 10px;
+  text-align: right;
+  color: var(--muted);
+  border-right: 2px solid #3a3a3a;
+  user-select: none;
   -webkit-user-select: none;
+}
+
+.ql-snow .ql-editor blockquote,
+.post-body-content blockquote {
+    border-left: 4px solid var(--accent-2);
+    background-color: var(--bg-2);
+    margin-left: 0;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding: 8px 16px;
+    width: 100%;
 }
 
 .board-item.readonly {
